@@ -81,12 +81,13 @@ def join_table(links_data):
 		else:
 			id_title_dict[link[0]] = link[1]
 
-	line_count = len(id_title_dict)
+	# line_count = len(id_title_dict)
 	template = '{"index":{"_type":"page","_id":"%s"}}\n{"title": "%s", "text": "%s", "link": "%s"}\n'
 
 	ff = open("./output_file/aawiki-article.json", "r", encoding="utf-8")
 
 	count = 0
+	file_count = 0
 	while True:
 		article_data = ff.readline()
 		if not article_data:
@@ -98,10 +99,15 @@ def join_table(links_data):
 		if article_id in id_title_dict:
 			match_title_list = id_title_dict[article_id]
 
-		if count <= int(line_count/2):
-			open("./output_file/dataset1.json", "a", encoding="utf-8").write(template % (article_id, article_data["title"], article_data["text"].replace("\n", " "), match_title_list))
-		else:
-			open("./output_file/dataset2.json", "a", encoding="utf-8").write(template % (article_id, article_data["title"], article_data["text"].replace("\n", " "), match_title_list))
+		if count % 10000 == 0:
+			file_count += 1
+		open("./output_file/dataset" + str(file_count) + ".json", "a", encoding="utf-8").write(template % (article_id, article_data["title"], article_data["text"].replace("\n", " "), match_title_list))
+
+
+		# if count <= int(line_count/2):
+		# 	open("./output_file/dataset1.json", "a", encoding="utf-8").write(template % (article_id, article_data["title"], article_data["text"].replace("\n", " "), match_title_list))
+		# else:
+		# 	open("./output_file/dataset2.json", "a", encoding="utf-8").write(template % (article_id, article_data["title"], article_data["text"].replace("\n", " "), match_title_list))
 		count += 1
 # def join_table():
 # 		dataset_list = [open("./output_file/dataset1.json", "w", encoding="utf-8"), open("./output_file/dataset2.json", "w", encoding="utf-8")]
