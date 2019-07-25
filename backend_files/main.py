@@ -12,7 +12,7 @@ from create_sql2json import sql2json
 
 # id_list = {}
 # def create_search_table():
-# 	with open("./output_file/aawiki-article.json", encoding="utf-8") as f:
+# 	with open("./output_file/simplewiki-article.json", encoding="utf-8") as f:
 # 		while True:
 # 			data = f.readline()
 # 			if not data:
@@ -62,6 +62,7 @@ def get_string_links():
 				link_str += '"%s":' % (value)
 			elif prefix.endswith('.link_keyword'):
 				link_str += '"%d/%s", ' % (int(from_id), value)
+	print("Completed get_string_links!")
 	return link_str[:-2] + '}'
 	# unsorted = pd.read_json("./output_file/link.json")
 	# (unsorted.sort_values("from")).to_json("./output_file/sorted_list.json")
@@ -80,11 +81,11 @@ def join_table(links_data):
 			id_title_dict[link[0]] = id_title_dict[link[0]] + "," + link[1]
 		else:
 			id_title_dict[link[0]] = link[1]
-
+	print("Completed id_title_dict!!")
 	# line_count = len(id_title_dict)
 	template = '{"index":{"_type":"page","_id":"%s"}}\n{"title": "%s", "text": "%s", "link": "%s"}\n'
 
-	ff = open("./output_file/aawiki-article.json", "r", encoding="utf-8")
+	ff = open("./output_file/simplewiki-article.json", "r", encoding="utf-8")
 
 	count = 0
 	file_count = 0
@@ -114,7 +115,7 @@ def join_table(links_data):
 # 		#dataset = open("./output_file/dataset.json", "w", encoding="utf-8")
 # 		template = '{"index":{"_type":"page","_id":"%s"}}\n{"title": "%s", "text": "%s", "link": "%s"}\n'
 #
-# 		ff = open("./output_file/aawiki-article.json", "r", encoding="utf-8").readlines()
+# 		ff = open("./output_file/simplewiki-article.json", "r", encoding="utf-8").readlines()
 # 		i = 0
 # 		with open("./output_file/sorted_list.json", encoding="utf-8") as f:
 # 			for dataset in dataset_list:
@@ -166,9 +167,9 @@ def transform_sql2json(input_sql_file):
     Tsql2json.change_sql2json()
 
 def change_files():
-	SOURCE_FILE = "./xml_file/aawiki-20190701-pages-articles.xml"
-	LINK_SQL_FILE = "./sql_file/aawiki-20190701-pagelinks.sql"
-	OUTPUT_FILE = "./output_file/aawiki-article.json"
+	SOURCE_FILE = "./xml_file/simplewiki-20190701-pages-articles.xml"
+	LINK_SQL_FILE = "./sql_file/simplewiki-20190701-pagelinks.sql"
+	OUTPUT_FILE = "./output_file/simplewiki-article.json"
 
 	th1 = threading.Thread(target=transform_xml2json, args=(SOURCE_FILE, OUTPUT_FILE,))
 	th2 = threading.Thread(target=transform_sql2json, args=(LINK_SQL_FILE,))
